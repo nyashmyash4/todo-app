@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import TodoListItem from '../todo-list-item/todo-list-item';
 
 import './todo-list.css';
 
-const TodoList = ({ todos }) => {
-  const elements = todos.map((item) => {
-    return <TodoListItem item={item} />;
-  });
+export default class TodoList extends Component {
+  render() {
+    const { todos, onDeleted } = this.props;
 
-  return <ul className="todo-list">{elements}</ul>;
-};
+    const elements = todos.map((item) => {
+      const { id } = item;
+      return (
+        <TodoListItem key={id} item={item} onDeleted={() => onDeleted(id)} />
+      );
+    });
 
-export default TodoList;
+    return <ul className="todo-list">{elements}</ul>;
+  }
+}

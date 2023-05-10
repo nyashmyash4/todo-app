@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { formatDistanceToNow } from 'date-fns';
 
@@ -15,26 +15,68 @@ const EditingInput = () => {
   );
 };
 
-const TodoListItem = ({ item }) => {
-  const { id, className, description, created, isEditing } = item;
+export default class TodoListItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { done: false, editing: false, checked: false };
+  }
 
-  const setDate = (date) =>
-    formatDistanceToNow(date, { addSuffix: true, includeSeconds: true });
+  setDate = (date) => {
+    return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true });
+  };
 
-  return (
-    <li className={className} key={id}>
-      <div className="view">
-        <input className="toggle" type="checkbox" />
-        <label>
-          <span className="description">{description}</span>
-          <span className="created">{setDate(created)}</span>
-        </label>
-        <button className="icon icon-edit"></button>
-        <button className="icon icon-destroy"></button>
-      </div>
-      {isEditing ? <EditingInput /> : null}
-    </li>
-  );
-};
+  onCompleted = () => {
+    this.setState(({ done, checked }) => {
+      return {
+        done: !done,
+        checked: !checked,
+      };
+    });
+  };
 
-export default TodoListItem;
+  onEdit = () => {
+    this.setState(({ editing }) => {
+      return {
+        editing: !editing,
+      };
+    });
+  };
+
+  render() {
+    const { id, description, created } = this.props.item;
+    const { done, editing } = this.state;
+
+    let classNames = '';
+    if (done) {
+      classNames += ' completed';
+    }
+
+    if (editing) {
+      classNames += ' editing';
+    }
+    return (
+      <li className={classNames} key={id}>
+        <div className="view">
+          <input
+            className="toggle"
+            type="checkbox"
+            checked={this.state.checked}
+            onChange={this.onCompleted}
+          />
+          <label>
+            <span className="description" onClick={this.onCompleted}>
+              {description}
+            </span>
+            <span className="created">{this.setDate(created)}</span>
+          </label>
+          <button className="icon icon-edit" onClick={this.onEdit}></button>
+          <button
+            className="icon icon-destroy"
+            onClick={this.props.onDeleted}
+          ></button>
+        </div>
+        {editing ? <EditingInput /> : null}
+      </li>
+    );
+  }
+}
