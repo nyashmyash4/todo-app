@@ -4,48 +4,23 @@ import { formatDistanceToNow } from 'date-fns';
 
 import './todo-list-item.css';
 
-const EditingInput = () => {
-  return (
-    <input
-      type="text"
-      className="edit"
-      placeholder="edit"
-      defaultValue="Editing task"
-    />
-  );
-};
-
 export default class TodoListItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { done: false, editing: false, checked: false };
-  }
-
   setDate = (date) => {
     return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true });
   };
 
-  onCompleted = () => {
-    this.setState(({ done, checked }) => {
-      return {
-        done: !done,
-        checked: !checked,
-      };
-    });
-  };
-
-  onEdit = () => {
-    this.setState(({ editing }) => {
-      return {
-        editing: !editing,
-      };
-    });
-  };
-
   render() {
-    const { id, description, created } = this.props.item;
-    const { done, editing } = this.state;
-
+    const {
+      id,
+      description,
+      created,
+      done,
+      editing,
+      onDeleted,
+      onDone,
+      onEdit,
+      saveEdit,
+    } = this.props;
     let classNames = '';
     if (done) {
       classNames += ' completed';
@@ -60,22 +35,27 @@ export default class TodoListItem extends Component {
           <input
             className="toggle"
             type="checkbox"
-            checked={this.state.checked}
-            onChange={this.onCompleted}
+            checked={done}
+            onChange={onDone}
           />
           <label>
-            <span className="description" onClick={this.onCompleted}>
+            <span className="description" onClick={onDone}>
               {description}
             </span>
             <span className="created">{this.setDate(created)}</span>
           </label>
-          <button className="icon icon-edit" onClick={this.onEdit}></button>
-          <button
-            className="icon icon-destroy"
-            onClick={this.props.onDeleted}
-          ></button>
+          <button className="icon icon-edit" onClick={onEdit}></button>
+          <button className="icon icon-destroy" onClick={onDeleted}></button>
         </div>
-        {editing ? <EditingInput /> : null}
+        {editing ? (
+          <input
+            type="text"
+            className="edit"
+            placeholder="edit"
+            defaultValue={description}
+            onKeyDown={(event) => saveEdit(id, event)}
+          />
+        ) : null}
       </li>
     );
   }

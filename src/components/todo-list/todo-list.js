@@ -6,12 +6,21 @@ import './todo-list.css';
 
 export default class TodoList extends Component {
   render() {
-    const { todos, onDeleted } = this.props;
+    const { todos, filter, onDeleted, onDone, onEdit, saveEdit } = this.props;
 
     const elements = todos.map((item) => {
       const { id } = item;
+
       return (
-        <TodoListItem key={id} item={item} onDeleted={() => onDeleted(id)} />
+        <TodoListItem
+          key={item.id}
+          {...item}
+          filter={filter}
+          onDeleted={() => onDeleted(id)}
+          onDone={() => onDone(id)}
+          onEdit={() => onEdit(id)}
+          saveEdit={saveEdit}
+        />
       );
     });
 
