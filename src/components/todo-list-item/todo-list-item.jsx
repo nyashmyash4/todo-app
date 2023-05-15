@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { formatDistanceToNow } from 'date-fns'
 
-import { formatDistanceToNow } from 'date-fns';
+import './todo-list-item.css'
 
-import './todo-list-item.css';
-
-export default class TodoListItem extends Component {
+export default class TodoListItem extends React.Component {
   static defaultProps = {
     id: 1,
     description: '',
@@ -16,7 +15,7 @@ export default class TodoListItem extends Component {
     onDone: () => {},
     onEdit: () => {},
     saveEdit: () => {},
-  };
+  }
 
   static propTypes = {
     id: PropTypes.number,
@@ -28,43 +27,28 @@ export default class TodoListItem extends Component {
     onDone: PropTypes.func,
     onEdit: PropTypes.func,
     saveEdit: PropTypes.func,
-  };
+  }
 
   setDate = (date) => {
-    return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true });
-  };
+    return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
+  }
 
   render() {
-    const {
-      id,
-      description,
-      created,
-      done,
-      editing,
-      onDeleted,
-      onDone,
-      onEdit,
-      saveEdit,
-    } = this.props;
-    let classNames = '';
+    const { id, description, created, done, editing, onDeleted, onDone, onEdit, saveEdit } = this.props
+    let classNames = ''
     if (done) {
-      classNames += ' completed';
+      classNames += ' completed'
     }
 
     if (editing) {
-      classNames += ' editing';
+      classNames += ' editing'
     }
     return (
       <li className={classNames} key={id}>
         <div className="view">
-          <input
-            className="toggle"
-            type="checkbox"
-            checked={done}
-            onChange={onDone}
-          />
+          <input className="toggle" type="checkbox" checked={done} onChange={onDone} />
           <label>
-            <span className="description" onClick={onDone}>
+            <span className="description" onClick={onDone} role="presentation">
               {description}
             </span>
             <span className="created">created {this.setDate(created)}</span>
@@ -82,6 +66,6 @@ export default class TodoListItem extends Component {
           />
         ) : null}
       </li>
-    );
+    )
   }
 }

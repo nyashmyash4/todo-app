@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import TaskFilter from '../task-filter/task-filter';
+import TaskFilter from '../task-filter/task-filter'
 
-import './footer.css';
+import './footer.css'
 
 const Footer = (props) => {
-  const { todos, deleteCompleted, getFilter, filter } = props;
-  const done = todos.filter((item) => item.done).length;
-  const tasksLeft = todos.length - done;
+  const { todos, deleteCompleted, getFilter, filter } = props
+  const done = todos.filter((item) => item.done).length
+  const tasksLeft = todos.length - done
 
   return (
     <footer className="footer">
@@ -18,15 +18,15 @@ const Footer = (props) => {
         Clear completed
       </button>
     </footer>
-  );
-};
+  )
+}
 
 Footer.defaultProprs = {
   todos: [{}],
   deleteCompleted: () => {},
   getFilter: () => {},
   filter: '',
-};
+}
 
 Footer.propTypes = {
   todos: PropTypes.arrayOf(
@@ -41,6 +41,6 @@ Footer.propTypes = {
   deleteCompleted: PropTypes.func,
   getFilter: PropTypes.func,
   filter: PropTypes.string,
-};
+}
 
-export default Footer;
+export default Footer

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import TodoListItem from '../todo-list-item/todo-list-item';
+import TodoListItem from '../todo-list-item/todo-list-item'
 
-import './todo-list.css';
+import './todo-list.css'
 
-export default class TodoList extends Component {
+export default class TodoList extends React.Component {
   static defaultProps = {
     todos: [{}],
     filter: '',
@@ -13,7 +13,7 @@ export default class TodoList extends Component {
     onDone: () => {},
     onEdit: () => {},
     saveEdit: () => {},
-  };
+  }
 
   static propTypes = {
     todos: PropTypes.arrayOf(
@@ -30,13 +30,13 @@ export default class TodoList extends Component {
     onDone: PropTypes.func,
     onEdit: PropTypes.func,
     saveEdit: PropTypes.func,
-  };
+  }
 
   render() {
-    const { todos, filter, onDeleted, onDone, onEdit, saveEdit } = this.props;
+    const { todos, filter, onDeleted, onDone, onEdit, saveEdit } = this.props
 
     const elements = todos.map((item) => {
-      const { id } = item;
+      const { id } = item
 
       return (
         <TodoListItem
@@ -48,9 +48,9 @@ export default class TodoList extends Component {
           onEdit={() => onEdit(id)}
           saveEdit={saveEdit}
         />
-      );
-    });
+      )
+    })
 
-    return <ul className="todo-list">{elements}</ul>;
+    return <ul className="todo-list">{elements}</ul>
   }
 }
