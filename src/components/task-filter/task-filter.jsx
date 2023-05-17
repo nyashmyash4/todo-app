@@ -28,14 +28,19 @@ export default class TaskFilter extends React.Component {
       const isActive = filter === item.name
 
       return (
-        <li key={name}>
-          <button name={name} className={isActive ? 'selected' : ''} onClick={() => getFilter(name)}>
-            {description}
-          </button>
-        </li>
+        <label key={name} className={isActive ? 'selected' : ''} onClick={() => getFilter(name)} role="presentation">
+          <input key={name} type="radio" name={name} />
+          {description}
+        </label>
       )
     })
 
-    return <ul className="filters">{elements}</ul>
+    return (
+      <ul className="filters">
+        {elements.map((el) => (
+          <li key={el.key}>{el}</li>
+        ))}
+      </ul>
+    )
   }
 }

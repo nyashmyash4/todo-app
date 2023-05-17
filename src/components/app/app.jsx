@@ -1,4 +1,5 @@
 import React from 'react'
+import { customAlphabet } from 'nanoid'
 
 import TodoList from '../todo-list/todo-list'
 import NewTaskForm from '../new-task-form/new-task-form'
@@ -9,7 +10,7 @@ import './app.css'
 export default class App extends React.Component {
   constructor(props) {
     super(props)
-    this.maxId = 100
+    this.nanoid = customAlphabet('1234567890', 5)
     this.state = {
       todos: [this.createItem('Learn React'), this.createItem('Sleep'), this.createItem('And Learn React')],
       filter: 'All',
@@ -29,9 +30,7 @@ export default class App extends React.Component {
 
   deleteCompleted = () => {
     this.setState(({ todos }) => {
-      // const copyTodos = structuredClone(todos);
-      const copyTodos = todos.map((el) => ({ ...el }))
-
+      const copyTodos = todos.map((el) => el)
       const notCompleted = copyTodos.filter((el) => !el.done)
 
       return {
@@ -58,7 +57,7 @@ export default class App extends React.Component {
       done: false,
       created: new Date(),
       description: text,
-      id: this.maxId++,
+      id: Number(this.nanoid()),
     }
   }
 
