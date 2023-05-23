@@ -1,41 +1,35 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import './new-task-form.css'
 
 export default class NewTaskForm extends React.Component {
-  state = {
-    text: '',
-  }
-
-  static defaultProps = {
-    onAdd: () => {},
-  }
-
-  static propTypes = {
-    onAdd: PropTypes.func,
-  }
-
-  onChangeInput = (evt) => {
-    this.setState({ text: evt.target.value })
-  }
-
-  onSubmitForm = (evt) => {
-    evt.preventDefault()
-    const { onAdd } = this.props
-    onAdd(this.state.text)
-    this.setState({ text: '' })
-  }
-
   render() {
+    const { value, sec, min, onSubmit, onChange } = this.props
+
     return (
-      <form onSubmit={this.onSubmitForm}>
+      <form className="new-todo-form" onSubmit={onSubmit}>
+        <input className="new-todo" placeholder="Todo?" value={value} required onChange={onChange} />
         <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          value={this.state.text}
-          onChange={this.onChangeInput}
+          className="new-todo-form__timer"
+          placeholder="Min"
+          type="number"
+          value={min}
+          required
+          onChange={onChange}
+          min={0}
+          max={60}
         />
+        <input
+          className="new-todo-form__timer"
+          placeholder="Sec"
+          type="number"
+          value={sec}
+          required
+          onChange={onChange}
+          min={0}
+          max={60}
+        />
+        <button type="submit"></button>
       </form>
     )
   }

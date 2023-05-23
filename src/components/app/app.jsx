@@ -14,6 +14,9 @@ export default class App extends React.Component {
     this.state = {
       todos: [this.createItem('Learn React'), this.createItem('Sleep'), this.createItem('And Learn React')],
       filter: 'All',
+      inputText: '',
+      inputMin: '',
+      inputSec: '',
     }
   }
 
@@ -51,21 +54,22 @@ export default class App extends React.Component {
     })
   }
 
-  createItem(text) {
+  createItem(text, min = 2, sec = 30) {
     return {
       editing: false,
       done: false,
       created: new Date(),
       description: text,
       id: Number(this.nanoid()),
+      min: min,
+      sec: sec,
     }
   }
 
-  addTask = (text) => {
+  addTask = (text, min, sec) => {
     const value = text.trim()
-    if (value.length) {
-      const newTask = this.createItem(value)
-
+    if (text.length) {
+      const newTask = this.createItem(value, min, sec)
       this.setState(({ todos }) => {
         const newArr = [newTask, ...todos]
         return {
@@ -131,15 +135,54 @@ export default class App extends React.Component {
   getFilterName = (buttonName) => {
     this.setState({ filter: buttonName })
   }
+  onSubmitForm = (evt) => {
+    evt.preventDefault()
+
+    this.addTask(this.state.inputText, this.state.inputMin, this.state.inputSec)
+    this.setState({ inputText: '', inputMin: '', inputSec: '' })
+  }
+
+  onChangeInput = (evt) => {
+    const target = evt.target.placeholder
+    if (target === 'Todo?') {
+      this.setState({ inputText: evt.target.value })
+    }
+
+    if (target === 'Min') {
+      this.setState({ inputMin: evt.target.value })
+    }
+
+    if (target === 'Sec') {
+      this.setState({ inputSec: evt.target.value })
+    }
+  }
+
+  updateTimer = (id, min, sec) => {
+    this.setState(({ todos }) => {
+      const index = todos.findIndex((el) => id === el.id)
+      const oldItem = todos[index]
+      const newItem = { ...oldItem, min: min, sec: sec }
+      const newArr = [...todos.slice(0, index), newItem, ...todos.slice(index + 1)]
+      return {
+        todos: newArr,
+      }
+    })
+  }
 
   render() {
-    const { todos, filter } = this.state
+    const { todos, filter, inputMin, inputSec, inputText } = this.state
     const visibleTasks = this.taskFilter(todos, filter)
     return (
       <section className="todoapp">
         <header className="header">
           <h1>Todos</h1>
-          <NewTaskForm onAdd={this.addTask} />
+          <NewTaskForm
+            min={inputMin}
+            sec={inputSec}
+            value={inputText}
+            onSubmit={(evt) => this.onSubmitForm(evt)}
+            onChange={(evt) => this.onChangeInput(evt)}
+          />
         </header>
         <div className="main">
           <TodoList
@@ -150,6 +193,7 @@ export default class App extends React.Component {
             onEdit={this.onEdit}
             saveEdit={this.saveEdit}
             endEdit={this.endEdit}
+            updateTimer={this.updateTimer}
           />
         </div>
         <Footer todos={todos} filter={filter} getFilter={this.getFilterName} deleteCompleted={this.deleteCompleted} />

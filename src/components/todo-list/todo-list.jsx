@@ -33,7 +33,7 @@ export default class TodoList extends React.Component {
   }
 
   render() {
-    const { todos, filter, onDeleted, onDone, onEdit, saveEdit } = this.props
+    const { todos, filter, onDeleted, onDone, onEdit, saveEdit, updateTimer } = this.props
 
     const elements = todos.map((item) => {
       const { id } = item
@@ -46,6 +46,7 @@ export default class TodoList extends React.Component {
           onDeleted={() => onDeleted(id)}
           onDone={() => onDone(id)}
           onEdit={() => onEdit(id)}
+          updateTimer={updateTimer}
           saveEdit={saveEdit}
         />
       )
